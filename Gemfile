@@ -10,3 +10,5 @@ gem 'pry'
 
 gem 'faker'   #random generator, names..etc
 gem 'tty-prompt'  #interactive command line prompt
+gem 'tty-box' #amazing boxes finally
+gem 'tty-cursor' #move text around

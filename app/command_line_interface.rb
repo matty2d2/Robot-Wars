@@ -1,6 +1,6 @@
 require_relative '../config/environment'
 #########################################################################################################
-def run
+  def run
     greeting
     login_menu
     player_menu
@@ -9,14 +9,17 @@ end
 #########################################################################################################
 
 def greeting
-    puts "Welcome to Robot Wars!".center(50)
-    puts "A game where you can create your own robot and pit it against other robots.\n \n"
-    puts "Can you succeed in beating the competition or will your robot end up the scrapyard?"
-    puts ""
+    box = TTY::Box.frame(width: 100, height: 10, align: :center, padding: [1,3,1,3]) do
+        "Welcome to ROBOT WARS! \n \n
+        A game where you can create your own robot and pit it against other robots.\n \n
+        Can you succeed in beating the competition or will your robot end up the scrapyard? \n"
+      end
+      print box
 end
 
 
 def login_menu
+    puts ""
     prompt = TTY::Prompt.new
     choice = prompt.select("Are you a returning player? Or a new player?", 'Existing Player', 'Create New Player')
 
@@ -28,9 +31,10 @@ def login_menu
 end
 
 def sign_in
+    puts ""
     prompt = TTY::Prompt.new
-    choice = prompt.select("select player:", Player.player_names, "Re-enter username", "Create New Player", "Back to Main Menu", filter: true)
-    
+    choice = prompt.select("Select player:", Player.player_names, "Re-enter username", "Create New Player", "Back to Main Menu", filter: true)
+
     if choice == "Re-enter username"
         sign_in
     elsif choice == "Create New Player"
@@ -45,6 +49,7 @@ end
 
 
 def create_user
+    puts ""
     prompt = TTY::Prompt.new
     new_name = prompt.ask("Enter new username:", required: true)
 
@@ -63,9 +68,10 @@ def create_user
 end
 
 def player_menu
+    puts ""
     prompt = TTY::Prompt.new
 
-    choice = prompt.select("select player:", "Fight!", "My Robots", "Back to Main Menu", "Quit Game")
+    choice = prompt.select("", "Fight!", "My Robots", "Back to Main Menu", "Quit Game")
 
     if choice == "Fight"
         fight
@@ -81,11 +87,13 @@ def player_menu
 end
 
 def fight
+
 end
 
 def my_robots
+    puts ""
     prompt = TTY::Prompt.new
-    choice = prompt.select("select robot:", $user.robot_names, "Fight with this robot!", "Back to Player Menu", "Quit Game")
+    choice = prompt.select("Select Robot:", $user.robot_names, "Fight with this robot!", "Back to Player Menu", "Quit Game")
 
     if choice == "Fight"
         fight
@@ -111,4 +119,5 @@ end
 
 def quit_game
     puts "Thanks for playing. Come back soon."
+    puts ""
 end
