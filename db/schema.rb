@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_07_124654) do
+ActiveRecord::Schema.define(version: 2019_09_09_131035) do
 
   create_table "batrobs", force: :cascade do |t|
     t.integer "hitpoints"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 2019_09_07_124654) do
   end
 
   create_table "players", force: :cascade do |t|
-    t.string "name"
+    t.string "username"
   end
 
   create_table "robots", force: :cascade do |t|

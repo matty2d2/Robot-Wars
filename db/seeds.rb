@@ -1,15 +1,15 @@
 
 #player_names = ["Matt", "Will", "Mike", "Dani", "Rose", "Michelle", "Tom", "Chris", "JB", "Angus", "Jack", "Steve", "Liz", "Ben", "Alex", "Sam", "Rob", ]
 
-# player1 = Player.new(name: Faker::Name.first_name)
-# player2 = Player.new(name: Faker::Name.first_name)
-# player3 = Player.new(name: Faker::Name.first_name)
-# player4 = Player.new(name: Faker::Name.first_name)
-# player5 = Player.new(name: Faker::Name.first_name)
-# player6 = Player.new(name: Faker::Name.first_name)
-# player7 = Player.new(name: Faker::Name.first_name)
-# player8 = Player.new(name: Faker::Name.first_name)
-# player9 = Player.new(name: Faker::Name.first_name)
+Player.create(username: Faker::Name.first_name)
+Player.create(username: Faker::Name.first_name)
+Player.create(username: Faker::Name.first_name)
+Player.create(username: Faker::Name.first_name)
+Player.create(username: Faker::Name.first_name)
+Player.create(username: Faker::Name.first_name)
+Player.create(username: Faker::Name.first_name)
+Player.create(username: Faker::Name.first_name)
+Player.create(username: Faker::Name.first_name)
 # player10 = Player.new()
 
 # battle1 = Battle.new()
