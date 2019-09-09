@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_09_131035) do
+ActiveRecord::Schema.define(version: 2019_09_07_124654) do
 
   create_table "batrobs", force: :cascade do |t|
-    t.integer "hitpoints"
     t.integer "robot_id"
     t.integer "battle_id"
   end
@@ -29,6 +28,8 @@ ActiveRecord::Schema.define(version: 2019_09_09_131035) do
   create_table "robots", force: :cascade do |t|
     t.string "name"
     t.integer "player_id"
+    t.integer "hitpoints", default: 100
+    t.integer "wins", default: 0
   end
 
 end

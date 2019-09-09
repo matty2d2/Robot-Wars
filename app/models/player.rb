@@ -5,9 +5,13 @@ class  Player < ActiveRecord::Base
         self.all.map{|player| player.username}
     end
 
-    def self.find_by_name(player_name)
-        player_names.select{|name| name.include?(player_name)}
+    def robot_names
+        self.robots.map{|robot| robot.name}
     end
+
+    # def self.find_by_name(player_name)
+    #     player_names.select{|name| name.include?(player_name)}
+    # end
 
 end
     
