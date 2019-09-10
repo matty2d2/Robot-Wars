@@ -8,7 +8,8 @@ class  Battle < ActiveRecord::Base
         a
     end
 
-    def 2vs2
+    def fight_2_vs_2
+        
     end
     
 end
