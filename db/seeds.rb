@@ -2,20 +2,12 @@
 #player_names = ["Matt", "Will", "Mike", "Dani", "Rose", "Michelle", "Tom", "Chris", "JB", "Angus", "Jack", "Steve", "Liz", "Ben", "Alex", "Sam", "Rob", ]
 
 
+10.times do
+    Player.create(username: Faker::Name.unique.first_name)
+end
 
-# Player.create(username: Faker::Name.first_name)
-# Player.create(username: Faker::Name.first_name)
-# Player.create(username: Faker::Name.first_name)
-# Player.create(username: Faker::Name.first_name)
-# Player.create(username: Faker::Name.first_name)
-# Player.create(username: Faker::Name.first_name)
-# Player.create(username: Faker::Name.first_name)
-# Player.create(username: Faker::Name.first_name)
-# Player.create(username: Faker::Name.first_name)
-# Player.create(username: Faker::Name.first_name)
-
-20.times do
-    Robot.create(name: Faker::Games::Pokemon.name, player_id: rand(1..10))
+40.times do
+    Robot.create(name: Faker::Games::Pokemon.unique.name, player_id: rand(1..10))
 end
 # Robot.create(name: Faker::Games::Pokemon.name, player_id: 2)
 # Robot.create(name: Faker::Games::Pokemon.name, player_id: 3)
