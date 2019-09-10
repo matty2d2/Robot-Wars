@@ -1,6 +1,6 @@
 require_relative '../config/environment'
 #########################################################################################################
-  def run
+def run
     greeting
     login_menu
     player_menu
@@ -16,8 +16,8 @@ def greeting
       end
       print box
 end
-
-
+########################################
+########################################
 def login_menu
     puts ""
     prompt = TTY::Prompt.new
@@ -29,8 +29,8 @@ def login_menu
         create_user
     end
 end
-
-
+########################################
+########################################
 def sign_in
     puts ""
     prompt = TTY::Prompt.new
@@ -47,8 +47,8 @@ def sign_in
         $user = Player.find_by(username: choice)
     end
 end
-
-
+########################################
+########################################
 def create_user
     puts ""
     prompt = TTY::Prompt.new
@@ -67,7 +67,8 @@ def create_user
         
     end
 end
-
+########################################
+########################################
 def player_menu
     puts ""
     prompt = TTY::Prompt.new
@@ -89,19 +90,8 @@ def player_menu
         return
     end
 end
-
-def fight
-    myrobot = $robot
-    battle = myrobot.choose_fight
-    victim = battle.fight
-    a = victim.check_hp
-    b = battle.robots - [a]
-    battle.winner = b[0].name
-    battle.save
-    # binding.pry
-    $user = Player.find_by(username: $user.username)
-end
-
+########################################
+########################################
 def my_robots
     puts ""
     prompt = TTY::Prompt.new
@@ -130,8 +120,27 @@ def my_robots
         end
     end
 end
+########################################
+########################################
+def fight
+    myrobot = $robot
+    battle = myrobot.choose_fight
+    b = battle.robots
 
+    until b.length == 1
+        victim = battle.fight
+        a = victim.check_hp
+        b = battle.robots - [a]
+    end
 
+    puts "\n The winner is #{b[0].name}!!!!!!"
+    puts "\n #{battle.robots - b} has been destroyed."
+    battle.winner = b[0].name
+    battle.save
+    $user = Player.find_by(username: $user.username)
+end
+########################################
+########################################
 def destroyed_robots
     puts ""
     prompt = TTY::Prompt.new
@@ -155,17 +164,29 @@ def destroyed_robots
         destroyed_robots
     end
 end
-
+########################################
+########################################
 def create_a_robot
     prompt = TTY::Prompt.new
     rob_name = prompt.ask("Enter a robot name:", required: true)
 
-    myrobot = Robot.create(name: rob_name, player_id: $user.id)
-    puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
+    if valid_robot_name?(rob_name)
+        myrobot = Robot.create(name: rob_name, player_id: $user.id)
+        puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
+    else
+        puts "Robot has not been created. There is already a robot with that name."
+        player_menu
+    end
+    
 end
 
-
+def valid_robot_name?(name)
+    !Robot.robot_names.include?(name)
+end
+########################################
+########################################
 def quit_game
     puts "Thanks for playing. Come back soon."
     puts ""
 end
+########################################
