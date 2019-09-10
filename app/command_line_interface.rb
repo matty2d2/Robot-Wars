@@ -95,9 +95,18 @@ def player_menu
         return
     end
 end
+
 ########################################
 ########################################
-def my_robots
+
+=======
+
+def fight_2vs2
+    # my_team = $robot + $robot2
+    
+end
+
+ def my_robots
     puts ""
     prompt = TTY::Prompt.new
     choice = prompt.select("Select a Robot:", $user.live_robo_names, "Back to Player Menu", "Quit Game")
@@ -133,7 +142,9 @@ def choose_gamemode
         fight
         player_menu
     elsif choice == "2 v 2"
-        fight2v2
+            # 2 vs 2
+            # fight method
+            # player_menu
         player_menu
     end
 end
