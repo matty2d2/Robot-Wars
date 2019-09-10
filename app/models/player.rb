@@ -2,16 +2,24 @@ class  Player < ActiveRecord::Base
     has_many :robots
 
     def self.player_names
-        self.all.map{|player| player.username}
+        self.all.map(&:username)
     end
 
-    def robot_names
-        self.robots.map{|robot| robot.name}
+    def live_robots
+        self.robots.select{|robot| robot.hitpoints > 0}
     end
 
-    # def self.find_by_name(player_name)
-    #     player_names.select{|name| name.include?(player_name)}
-    # end
+    def live_robo_names
+        live_robots.map(&:name)
+    end
+
+    def dead_robots
+        self.robots.select{|robot| robot.hitpoints == 0}
+    end
+
+    def dead_robo_names
+        dead_robots.map(&:name)
+    end
 
 end
     

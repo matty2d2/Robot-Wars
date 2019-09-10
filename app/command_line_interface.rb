@@ -30,6 +30,7 @@ def login_menu
     end
 end
 
+
 def sign_in
     puts ""
     prompt = TTY::Prompt.new
@@ -71,13 +72,16 @@ def player_menu
     puts ""
     prompt = TTY::Prompt.new
 
-    choice = prompt.select("", "Fight!", "My Robots", "Back to Main Menu", "Quit Game")
+    choice = prompt.select("", "Create a new Robot!", "My Robots", "My Destroyed Robots", "Back to Log-in Menu", "Quit Game")
 
-    if choice == "Fight"
-        fight
+    if choice == "Create a new Robot!"
+        create_a_robot
+        player_menu
     elsif choice == "My Robots"
         my_robots
-    elsif choice == "Back to Main Menu"
+    elsif choice == "My Destroyed Robots"
+        destroyed_robots
+    elsif choice == "Back to Log-in Menu"
         login_menu
         player_menu
     elsif choice == "Quit Game"
@@ -87,35 +91,79 @@ def player_menu
 end
 
 def fight
-
+    myrobot = $robot
+    battle = myrobot.choose_fight
+    victim = battle.fight
+    a = victim.check_hp
+    b = battle.robots - [a]
+    battle.winner = b[0].name
+    battle.save
+    # binding.pry
+    $user = Player.find_by(username: $user.username)
 end
 
 def my_robots
     puts ""
     prompt = TTY::Prompt.new
-    choice = prompt.select("Select Robot:", $user.robot_names, "Fight with this robot!", "Back to Player Menu", "Quit Game")
+    choice = prompt.select("Select a Robot:", $user.live_robo_names, "Back to Player Menu", "Quit Game")
 
-    if choice == "Fight"
-        fight
-    elsif choice == "My Robots"
-        my_robots
-    elsif choice == "Fight with this robot!"
-        fight   
-    elsif choice == "Back to Player Menu"
+    if choice == "Back to Player Menu"
         player_menu
     elsif choice == "Quit Game"
         quit_game
         return
     else
-        robot = Robot.find_by(name: choice)
+        myrobot = $user.robots.find_by(name: choice)
+        sleep(0.4)
         puts ""
-        puts choice
-        puts robot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
-        puts ""
-        sleep(2)
-        my_robots
+        puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
+        puts "Has won #{myrobot.wins} battle(s)."
+        sleep(1)
+        choice = prompt.select("", "Fight with this Robot!", "Return to my Robots")
+
+        if choice == "Fight with this Robot!"
+            $robot = myrobot
+            fight
+            player_menu
+        elsif choice == "Return to my Robots"
+            my_robots
+        end
     end
 end
+
+
+def destroyed_robots
+    puts ""
+    prompt = TTY::Prompt.new
+    choice = prompt.select("Select a Robot:", $user.dead_robo_names, "Back to Player Menu", "Sell all leftover parts (deletes robots)", "Quit Game")
+
+    if choice == "Back to Player Menu"
+        player_menu
+    elsif choice == "Sell all leftover parts (deletes robots)"
+        $user.dead_robots.each(&:delete)
+        player_menu
+    elsif choice == "Quit Game"
+        quit_game
+        return
+    else
+        myrobot = Robot.find_by(name: choice)
+        sleep(0.4)
+        puts ""
+        puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
+        puts "Has won #{myrobot.wins} battle(s)."
+        sleep(1)
+        destroyed_robots
+    end
+end
+
+def create_a_robot
+    prompt = TTY::Prompt.new
+    rob_name = prompt.ask("Enter a robot name:", required: true)
+
+    myrobot = Robot.create(name: rob_name, player_id: $user.id)
+    puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
+end
+
 
 def quit_game
     puts "Thanks for playing. Come back soon."

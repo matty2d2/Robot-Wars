@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(version: 2019_09_07_124654) do
     t.string "name"
     t.integer "player_id"
     t.integer "hitpoints", default: 100
-    t.integer "wins", default: 0
   end
 
 end
