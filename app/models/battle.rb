@@ -7,5 +7,9 @@ class  Battle < ActiveRecord::Base
         a.lose_hp
         a
     end
+
+    def 2vs2
+    end
+    
 end
     
