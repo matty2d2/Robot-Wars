@@ -9,10 +9,13 @@ end
 #########################################################################################################
 
 def greeting
-    box = TTY::Box.frame(width: 100, height: 10, align: :center, padding: [1,3,1,3]) do
-        "Welcome to ROBOT WARS! \n \n
-        A game where you can create your own robot and pit it against other robots.\n \n
-        Can you succeed in beating the competition or will your robot end up the scrapyard? \n"
+    box = TTY::Box.frame(width: 90, height: 10, align: :center, padding: 1) do
+         '         ______       _                   _  _  _                 
+        (_____ \     | |           _     (_)(_)(_)                
+         _____) )___ | |__   ___ _| |_    _  _  _ _____  ____ ___ 
+        |  __  // _ \|  _ \ / _ (_   _)  | || || (____ |/ ___)___)
+        | |  \ \ |_| | |_) ) |_| || |_   | || || / ___ | |  |___ |
+        |_|   |_\___/|____/ \___/  \__)   \_____/\_____|_|  (___/ '
       end
       print box
 end
@@ -73,7 +76,7 @@ def player_menu
     puts ""
     prompt = TTY::Prompt.new
 
-    choice = prompt.select("", "Create a new Robot!", "My Robots", "My Destroyed Robots", "Back to Log-in Menu", "Quit Game")
+    choice = prompt.select("", "Create a new Robot!", "My Robots", "My Destroyed Robots", "Stats", "Back to Log-in Menu", "Quit Game")
 
     if choice == "Create a new Robot!"
         create_a_robot
@@ -82,6 +85,8 @@ def player_menu
         my_robots
     elsif choice == "My Destroyed Robots"
         destroyed_robots
+    elsif choice == "Stats"
+        stats
     elsif choice == "Back to Log-in Menu"
         login_menu
         player_menu
@@ -109,32 +114,44 @@ def my_robots
         puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
         puts "Has won #{myrobot.wins} battle(s)."
         sleep(1)
-        choice = prompt.select("", "Fight with this Robot!", "Return to my Robots")
+        $robot = myrobot
 
+        choice = prompt.select("", "Fight with this Robot!", "Return to my Robots")
         if choice == "Fight with this Robot!"
-            $robot = myrobot
-            fight
-            player_menu
+            choose_gamemode
         elsif choice == "Return to my Robots"
             my_robots
         end
     end
 end
 ########################################
+def choose_gamemode
+    prompt = TTY::Prompt.new
+    choice = prompt.select("Choose a game-mode:", "Battle-Royale", "2 v 2")
+    
+    if choice == "Battle-Royale"
+        fight
+        player_menu
+    elsif choice == "2 v 2"
+        fight2v2
+        player_menu
+    end
+end
 ########################################
 def fight
     myrobot = $robot
     battle = myrobot.choose_fight
     b = battle.robots
+    rob_names = b.map(&:name)
 
     until b.length == 1
         victim = battle.fight
         a = victim.check_hp
-        b = battle.robots - [a]
+        b -= [a]
     end
 
     puts "\n The winner is #{b[0].name}!!!!!!"
-    puts "\n #{battle.robots - b} has been destroyed."
+    puts "\n #{rob_names - [b[0].name]} has been destroyed."
     battle.winner = b[0].name
     battle.save
     $user = Player.find_by(username: $user.username)
@@ -190,3 +207,19 @@ def quit_game
     puts ""
 end
 ########################################
+########################################
+def stats
+    prompt = TTY::Prompt.new
+
+    sleep(0.2)
+    puts "Total Wins: #{$user.total_wins}"
+    sleep(0.5)
+    puts "Number of Robots: #{$user.live_robots.length}"
+    sleep(0.5)
+    puts "Number of Destroyed Robots: #{$user.dead_robots.length}"
+    sleep(0.5)
+    puts "Robot with the most wins: #{$user.best_robot.name} ~ #{$user.best_robot.wins}"
+    sleep(0.5)
+    prompt.ask("Press Enter to return back to the player menu.")
+    player_menu
+end
