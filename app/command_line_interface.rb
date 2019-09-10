@@ -103,8 +103,8 @@ def fight
 end
 
 def fight_2vs2
-    # my_team = $robot + $robot2
-    
+    # my_team = [$robot, $robot2]
+
 end
 
  def my_robots
@@ -119,6 +119,7 @@ end
         return
     else
         myrobot = $user.robots.find_by(name: choice)
+        $robot = myrobot
         sleep(0.4)
         puts ""
         puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
@@ -126,11 +127,16 @@ end
         sleep(1)
         choice = prompt.select("", "Fight with this Robot!", "Return to my Robots")
         if choice == "Fight with this Robot!"
-            $robot = myrobot
             fight_choice = prompt.select("Choose your fight type:", "1 vs 1", "2 vs 2", "All vs All")
             fight
             player_menu
             # 2 vs 2
+            # $robot2 = $user.robots.find_by(name: choice).reject{|robot| robot.name == $robot}
+            # sleep(0.4)
+            # puts ""
+            # puts $robot2.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
+            # puts "Has won #{$robot2.wins} battle(s)."
+            # sleep(1)
             # fight method
             # player_menu
         elsif choice == "Return to my Robots"
