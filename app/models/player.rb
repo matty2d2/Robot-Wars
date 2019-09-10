@@ -6,7 +6,7 @@ class  Player < ActiveRecord::Base
     end
 
     def live_robots
-        self.robots.select{|robot| robot.hitpoints > 0}
+        robots.select{|robot| robot.hitpoints > 0}
     end
 
     def live_robo_names
@@ -14,11 +14,19 @@ class  Player < ActiveRecord::Base
     end
 
     def dead_robots
-        self.robots.select{|robot| robot.hitpoints == 0}
+        robots.select{|robot| robot.hitpoints == 0}
     end
 
     def dead_robo_names
         dead_robots.map(&:name)
+    end
+
+    def total_wins
+        robots.sum{|robot| robot.wins}
+    end
+
+    def best_robot
+        robots.max_by(&:wins)
     end
 
 end
