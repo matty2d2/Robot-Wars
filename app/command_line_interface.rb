@@ -135,6 +135,7 @@ def choose_gamemode
         fight
         player_menu
     elsif choice == "2 v 2"
+        select_teammate
         fight_2vs2
         player_menu
     end
@@ -159,7 +160,7 @@ def fight
     $user = Player.find_by(username: $user.username)
 end
 ########################################
-def fight_2vs2
+def select_teammate
     prompt = TTY::Prompt.new
     choice_2 = prompt.select("Select your 2nd Robot:", $user.live_robo_names.reject{|robot| robot == $robot.name}, "Back to Player Menu", "Quit Game")
     if choice_2 == "Back to Player Menu"
@@ -169,8 +170,12 @@ def fight_2vs2
         return
     else
         $robot2 = $user.robots.find_by(name: choice_2)
-        $robot.choose_2vs2_fight($robot2)
     end
+end
+########################################
+def fight_2vs2
+    battle = $robot.choose_2vs2_fight($robot2)
+    b = battle.robots
 end
 ########################################
 def destroyed_robots
