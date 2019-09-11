@@ -28,7 +28,7 @@ def login_menu
 
     if choice == "Existing Player"
         sign_in
-    else
+    elsif choice == "Create New Player"
         create_user
     end
 end
@@ -91,7 +91,7 @@ def player_menu
         login_menu
         player_menu
     elsif choice == "Quit Game"
-        quit_game
+        quit_game_message
         return
     end
 end
@@ -107,7 +107,7 @@ end
     if choice == "Back to Player Menu"
         player_menu
     elsif choice == "Quit Game"
-        quit_game
+        quit_game_message
         return
     else
         myrobot = $user.robots.find_by(name: choice)
@@ -160,23 +160,36 @@ def fight
     $user = Player.find_by(username: $user.username)
 end
 ########################################
+def fight_2vs2
+    battle = $robot.choose_2vs2_fight($robot2)
+    player_team = battle.robots.select{|robot| robot.player_id == $user.id}
+    opposition_team = battle.robots.select{|robot| robot.player_id != $user.id}
+    teams = [player_team] + [opposition_team]
+    win = battle.fight_2_vs_2(player_team, opposition_team)
+    winners = win.map{|robot| robot.id}
+        binding.pry
+    losers = battle.robots.all.reject{|robot| robot.idinclude(winners)}
+    # binding.pry
+    puts "\n The winner(s) is(are) #{winners}!!!!!!"
+    puts "\n #{loosers.each.name} has been destroyed."
+    battle.winner = winners.name
+    battle.save
+    $user = Player.find_by(username: $user.username)
+end
+########################################
 def select_teammate
     prompt = TTY::Prompt.new
     choice_2 = prompt.select("Select your 2nd Robot:", $user.live_robo_names.reject{|robot| robot == $robot.name}, "Back to Player Menu", "Quit Game")
     if choice_2 == "Back to Player Menu"
         player_menu
     elsif choice_2 == "Quit Game"
-        quit_game
+        quit_game_message
         return
     else
         $robot2 = $user.robots.find_by(name: choice_2)
     end
 end
-########################################
-def fight_2vs2
-    battle = $robot.choose_2vs2_fight($robot2)
-    b = battle.robots
-end
+
 ########################################
 def destroyed_robots
     puts ""
@@ -189,7 +202,7 @@ def destroyed_robots
         $user.dead_robots.each(&:delete)
         player_menu
     elsif choice == "Quit Game"
-        quit_game
+        quit_game_message
         return
     else
         myrobot = Robot.find_by(name: choice)
@@ -222,7 +235,7 @@ def valid_robot_name?(name)
 end
 ########################################
 ########################################
-def quit_game
+def quit_game_message
     puts "Thanks for playing. Come back soon."
     puts ""
 end

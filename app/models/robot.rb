@@ -65,6 +65,10 @@ class  Robot < ActiveRecord::Base
         self.save
     end
 
+    def lose_hitpoints
+        self.hitpoints -= rand(0..100)
+    end
+
     def check_hp
         if self.hitpoints <= 0
             self.hitpoints = 0
