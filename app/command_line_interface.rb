@@ -168,7 +168,7 @@ def fight_2vs2
     win = battle.fight_2_vs_2(player_team, opposition_team)
     winners = win.map{|robot| robot.id}
         binding.pry
-    losers = battle.robots.all.reject{|robot| robot.idinclude(winners)}
+    losers = battle.robots.all.reject{|robot| robot.id.include(winners)}
     # binding.pry
     puts "\n The winner(s) is(are) #{winners}!!!!!!"
     puts "\n #{loosers.each.name} has been destroyed."
