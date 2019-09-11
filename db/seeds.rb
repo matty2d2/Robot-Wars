@@ -1,5 +1,6 @@
 
 
+
 10.times do
     Player.create(username: Faker::Name.unique.first_name)
 end
