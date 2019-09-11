@@ -99,13 +99,6 @@ end
 ########################################
 ########################################
 
-=======
-
-def fight_2vs2
-    # my_team = [$robot, $robot2]
-
-end
-
  def my_robots
     puts ""
     prompt = TTY::Prompt.new
@@ -124,7 +117,6 @@ end
         puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
         puts "Has won #{myrobot.wins} battle(s)."
         sleep(1)
-        $robot = myrobot
 
         choice = prompt.select("", "Fight with this Robot!", "Return to my Robots")
         if choice == "Fight with this Robot!"
@@ -143,15 +135,7 @@ def choose_gamemode
         fight
         player_menu
     elsif choice == "2 v 2"
-            # 2 vs 2
-            # $robot2 = $user.robots.find_by(name: choice).reject{|robot| robot.name == $robot}
-            # sleep(0.4)
-            # puts ""
-            # puts $robot2.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
-            # puts "Has won #{$robot2.wins} battle(s)."
-            # sleep(1)
-            # fight method
-            # player_menu
+        fight_2vs2
         player_menu
     end
 end
@@ -175,6 +159,19 @@ def fight
     $user = Player.find_by(username: $user.username)
 end
 ########################################
+def fight_2vs2
+    prompt = TTY::Prompt.new
+    choice_2 = prompt.select("Select your 2nd Robot:", $user.live_robo_names.reject{|robot| robot == $robot.name}, "Back to Player Menu", "Quit Game")
+    if choice_2 == "Back to Player Menu"
+        player_menu
+    elsif choice_2 == "Quit Game"
+        quit_game
+        return
+    else
+        $robot2 = $user.robots.find_by(name: choice_2)
+        $robot.choose_2vs2_fight($robot2)
+    end
+end
 ########################################
 def destroyed_robots
     puts ""
