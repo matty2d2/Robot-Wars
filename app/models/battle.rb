@@ -20,6 +20,5 @@ class  Battle < ActiveRecord::Base
         self.robots.all.select{|robot| robot.hitpoints > 0}
         # binding.pry
     end
-    
 end
     

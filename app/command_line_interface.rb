@@ -95,9 +95,8 @@ def player_menu
         return
     end
 end
-
 ########################################
-########################################
+#########################################
 
  def my_robots
     puts ""
@@ -118,8 +117,11 @@ end
         puts "Has won #{myrobot.wins} battle(s)."
         sleep(1)
 
-        choice = prompt.select("", "Fight with this Robot!", "Return to my Robots")
-        if choice == "Fight with this Robot!"
+        choice = prompt.select("", "Fight with this Robot!", "Configure Robot", "Return to my Robots")
+        if choice == "Configure Robot"
+            configure_robot
+            my_robots
+        elsif choice == "Fight with this Robot!"
             choose_gamemode
         elsif choice == "Return to my Robots"
             my_robots
@@ -225,9 +227,7 @@ def create_a_robot
         puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
     else
         puts "Robot has not been created. There is already a robot with that name."
-        player_menu
     end
-    
 end
 
 def valid_robot_name?(name)
@@ -257,3 +257,28 @@ def stats
     player_menu
 end
 ########################################
+########################################
+def configure_robot
+    prompt = TTY::Prompt.new
+    choice = prompt.select("What would you like to configure?", "Change Robot Name", "Back to Player Menu", "Quit Game")
+
+    if choice == "Change Robot Name"
+        change_name
+    elsif choice == "Back to Player Menu"
+        player_menu
+    elsif choice == "Quit Game"
+        quit_game
+        return
+    end
+end
+
+def change_name
+    prompt = TTY::Prompt.new
+    rob_name = prompt.ask("What would you like to change your robot name to:", required: true)
+
+    if valid_robot_name?(rob_name)
+        $robot.update(name: rob_name)
+    else
+        puts "Robot name has not been changed. There is already a robot with that name."
+    end
+end
