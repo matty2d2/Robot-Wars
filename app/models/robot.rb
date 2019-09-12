@@ -77,8 +77,17 @@ class  Robot < ActiveRecord::Base
         end
     end
 
-    def wins
-        battles.reload.uniq.select{|battle| battle.winner.include?(self.name)}.length
+    def wins # counts wins of robot (via id) so name change does not affect it
+        battles.reload.uniq.select {|battle| 
+        if battle == nil
+            false
+        elsif battle.winner == nil
+            false
+        else
+            battle.winner.gsub(/[\[\]]/,"").split(", ").map(&:to_i).include?(self.id)
+            # removing the array from the string in order to interact with winner ids
+        end
+    }.length #gives number of wins
     end
 
     def update_hitpoints

@@ -114,6 +114,7 @@ end
         sleep(0.4)
         puts ""
         puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
+        # binding.pry
         puts "Has won #{myrobot.wins} battle(s)."
         sleep(1)
 
@@ -157,8 +158,8 @@ def fight
 
     puts "\n The winner is #{b[0].name}!!!!!!"
     puts "\n #{rob_names - [b[0].name]} has been destroyed."
-    battle.winner = [b[0].name]
-    battle.save
+    battle.update(winner: [b[0].id])
+    b[0].update_hitpoints
 
     $user = Player.find_by(username: $user.username)
 end
@@ -167,7 +168,7 @@ def fight_2vs2
     battle = $robot.choose_2vs2_fight($robot2)
     player_team = battle.robots.select{|robot| robot.player_id == $user.id}
     opposition_team = battle.robots.select{|robot| robot.player_id != $user.id}
-    teams = [player_team] + [opposition_team]
+    # teams = [player_team] + [opposition_team]
     win = battle.fight_2_vs_2(player_team, opposition_team)
         # binding.pry
     losers = battle.robots - win
@@ -180,10 +181,9 @@ def fight_2vs2
         puts "\n The winner is #{win.map(&:name).join(", ")}!!!!!!"
     end
         puts "\n ... #{losers.map(&:name).join(", ")} have been destroyed."
-        battle.winner = win.map(&:name)
-        # win.update_hitpoints
-        battle.save
-                # binding.pry
+        # binding.pry
+        battle.update(winner: win.map(&:id))
+        # winners = Robot.find_by()
         win.each{|winner| winner.update_hitpoints}
         $user = Player.find_by(username: $user.username)
 end
@@ -211,7 +211,7 @@ def destroyed_robots
         player_menu
     elsif choice == "Sell all leftover parts (deletes robots)"
         $user.dead_robots.each(&:delete)
-        puts "\n There were no salvageable parts. Better luck next time!"
+        puts "\n Your robot(s) has(ve) been absolutely annihilated, there were no salvageable parts. Better luck next time!"
         player_menu
     elsif choice == "Quit Game"
         quit_game_message
