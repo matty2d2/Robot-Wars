@@ -78,9 +78,12 @@ class  Robot < ActiveRecord::Base
     end
 
     def wins
-        battles.uniq.select{|battle| battle.winner == self.name}.length
+        battles.reload.uniq.select{|battle| battle.winner.include?(self.name)}.length
     end
 
+    def update_hitpoints
+        self.update(hitpoints: 100 + (45 * self.wins))
+    end
 
 end
     
