@@ -60,11 +60,6 @@ class  Robot < ActiveRecord::Base
         battle
     end
 
-    def lose_hp
-        self.hitpoints -= 100
-        self.save
-    end
-
     def lose_hitpoints
         self.hitpoints -= rand(0..100)
     end
@@ -73,8 +68,8 @@ class  Robot < ActiveRecord::Base
         if self.hitpoints <= 0
             self.hitpoints = 0
             self.save
-            self
         end
+        self
     end
 
     def wins # counts wins of robot (via id) so name change does not affect it

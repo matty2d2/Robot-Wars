@@ -6,7 +6,7 @@ class  Player < ActiveRecord::Base
     end
 
     def live_robots
-        robots.select{|robot| robot.hitpoints > 0}
+        robots.reload.select{|robot| robot.hitpoints > 0}
     end
 
     def live_robo_names
