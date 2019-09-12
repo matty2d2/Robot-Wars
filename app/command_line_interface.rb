@@ -157,7 +157,6 @@ def fight
     battle.update(winner: [b[0].id])
 
     b[0].update_hitpoints
-
     $user = Player.find_by(username: $user.username)
 end
 ########################################
