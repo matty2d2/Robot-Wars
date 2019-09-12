@@ -4,14 +4,16 @@ class  Battle < ActiveRecord::Base
 
     def fight
         fighting_robots = self.robots
-        until fighting_robots.length == 1
+        until fighting_robots.length > 1
             fighting_robots.each do |robot|
-                robot.lose_hitpoints
                 r = robot.check_hp
 
                 if r.hitpoints <= 0
+                    # binding.pry
+
                     fighting_robots -= [r]
                 end
+                robot.lose_hitpoints
             end
         end
         fighting_robots

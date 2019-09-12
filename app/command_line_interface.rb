@@ -151,7 +151,7 @@ def fight
     robot_names = battle.robots.map(&:name)
     b = battle.fight
    
-    puts "\n The winner is #{b[0].name}!!!!!!"
+    puts "\n The winner is #{b[0].name}!"
     puts "\n #{robot_names - [b[0].name]} has been destroyed."
 
     battle.update(winner: [b[0].id])
@@ -167,11 +167,11 @@ def fight_2vs2
     win = battle.fight_2_vs_2(player_team, opposition_team)
     losers = battle.robots - win
     if win.length == 2
-         puts "\n The winners are #{win.map(&:name).join(", ")}!!!!!!"
+         puts "\n The winners are #{win.map(&:name).join(", ")}!"
     elsif win.length == 0
         puts "Every robot has died for your cause"
     elsif win.length == 1
-        puts "\n The winner is #{win.map(&:name).join(", ")}!!!!!!"
+        puts "\n The winner is #{win.map(&:name).join(", ")}!"
     end
     puts "\n ... #{losers.map(&:name).join(", ")} have been destroyed."
     battle.update(winner: win.map(&:id))
