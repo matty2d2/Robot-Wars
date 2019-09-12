@@ -147,12 +147,15 @@ end
 def fight
     myrobot = $robot
     battle = myrobot.choose_fight
+    
     robot_names = battle.robots.map(&:name)
     b = battle.fight
-    
+   
     puts "\n The winner is #{b[0].name}!!!!!!"
-    puts "\n #{rob_names - [b[0].name]} has been destroyed."
+    puts "\n #{robot_names - [b[0].name]} has been destroyed."
+
     battle.update(winner: [b[0].id])
+
     b[0].update_hitpoints
 
     $user = Player.find_by(username: $user.username)
@@ -162,7 +165,6 @@ def fight_2vs2
     battle = $robot.choose_2vs2_fight($robot2)
     player_team = battle.robots.select{|robot| robot.player_id == $user.id}
     opposition_team = battle.robots.select{|robot| robot.player_id != $user.id}
-    # teams = [player_team] + [opposition_team]
     win = battle.fight_2_vs_2(player_team, opposition_team)
     losers = battle.robots - win
     if win.length == 2

@@ -22,7 +22,7 @@ class  Robot < ActiveRecord::Base
         robot_options = Robot.live_robots.reject{|r| r == self}.sample(5)
         options = robot_options.map(&:name)
 
-        choices = prompt.multi_select("Choose a robot to fight:", options, max: 3, default: 1 )
+        choices = prompt.multi_select("Choose robot(s) to fight:", options, max: 3, default: 1 )
         selected_robots =  robot_options.select{|obj| choices.include?(obj.name)}
         
         Batrob.create(robot_id: self.id, battle_id: battle.id)
