@@ -114,7 +114,7 @@ end
         sleep(0.4)
         puts ""
         puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
-        # binding.pry
+
         puts "Has won #{myrobot.wins} battle(s)."
         sleep(1)
 
@@ -170,9 +170,7 @@ def fight_2vs2
     opposition_team = battle.robots.select{|robot| robot.player_id != $user.id}
     # teams = [player_team] + [opposition_team]
     win = battle.fight_2_vs_2(player_team, opposition_team)
-        # binding.pry
     losers = battle.robots - win
-    # binding.pry
     if win.length == 2
          puts "\n The winners are #{win.map(&:name).join(", ")}!!!!!!"
     elsif win.length == 0
@@ -180,12 +178,10 @@ def fight_2vs2
     elsif win.length == 1
         puts "\n The winner is #{win.map(&:name).join(", ")}!!!!!!"
     end
-        puts "\n ... #{losers.map(&:name).join(", ")} have been destroyed."
-        # binding.pry
-        battle.update(winner: win.map(&:id))
-        # winners = Robot.find_by()
-        win.each{|winner| winner.update_hitpoints}
-        $user = Player.find_by(username: $user.username)
+    puts "\n ... #{losers.map(&:name).join(", ")} have been destroyed."
+    battle.update(winner: win.map(&:id))
+    win.each{|winner| winner.update_hitpoints}
+    $user = Player.find_by(username: $user.username)
 end
 ########################################
 def select_teammate
