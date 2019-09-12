@@ -37,11 +37,9 @@ end
 def sign_in
     puts ""
     prompt = TTY::Prompt.new
-    choice = prompt.select("Select player:", Player.player_names, "Re-enter username", "Create New Player", "Back to Main Menu", filter: true)
+    choice = prompt.select("Select player:", Player.player_names, "Create New Player", "Back to Main Menu", filter: true)
 
-    if choice == "Re-enter username"
-        sign_in
-    elsif choice == "Create New Player"
+    if choice == "Create New Player"
         create_user
     elsif choice == "Back to Main Menu"
         login_menu
@@ -146,19 +144,14 @@ end
 def fight
     myrobot = $robot
     battle = myrobot.choose_fight
-    b = battle.robots
-    rob_names = b.map(&:name)
-
-    until b.length == 1
-        victim = battle.fight
-        a = victim.check_hp
-        b -= [a]
-    end
-
+    robot_names = battle.robots.map(&:name)
+    b = battle.fight
+    
     puts "\n The winner is #{b[0].name}!!!!!!"
-    puts "\n #{rob_names - [b[0].name]} has been destroyed."
+    puts "\n #{robot_names - [b[0].name]} has been destroyed."
     battle.winner = b[0].name
     battle.save
+    binding.pry
     $user = Player.find_by(username: $user.username)
 end
 ########################################
@@ -168,13 +161,15 @@ def fight_2vs2
     opposition_team = battle.robots.select{|robot| robot.player_id != $user.id}
     teams = [player_team] + [opposition_team]
     win = battle.fight_2_vs_2(player_team, opposition_team)
-    winners = win.map{|robot| robot.id}
-        binding.pry
-    losers = battle.robots.all.reject{|robot| robot.idinclude(winners)}
-    # binding.pry
-    puts "\n The winner(s) is(are) #{winners}!!!!!!"
-    puts "\n #{loosers.each.name} has been destroyed."
-    battle.winner = winners.name
+    losers = battle.robots - win
+
+    if win != [] 
+        puts "\n The winner(s) is/are #{win.map(&:name).join(", ")}!!!!!!"
+    end
+
+    puts "\n #{losers.map(&:name).join(", ")} have been destroyed."
+
+    battle.winner = win.map(&:name).join(", ")
     battle.save
     $user = Player.find_by(username: $user.username)
 end
