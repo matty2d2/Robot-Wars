@@ -24,12 +24,14 @@ end
 def login_menu
     puts ""
     prompt = TTY::Prompt.new
-    choice = prompt.select("Are you a returning player? Or a new player?", 'Existing Player', 'Create New Player')
+    choice = prompt.select("Are you a returning player? Or a new player?", 'Existing Player', 'Create New Player', 'Quit Game')
 
     if choice == "Existing Player"
         sign_in
     elsif choice == "Create New Player"
         create_user
+    elsif choice == "Quit Game"
+        quit_game_message
     end
 end
 ########################################
@@ -94,12 +96,12 @@ def player_menu
     end
 end
 ########################################
-#########################################
+########################################
 
  def my_robots
     puts ""
     prompt = TTY::Prompt.new
-    choice = prompt.select("Select a Robot:", $user.live_robo_names, "Back to Player Menu", "Quit Game")
+    choice = prompt.select("Select a Robot:", $user.reload.live_robo_names, "Back to Player Menu", "Quit Game")
 
     if choice == "Back to Player Menu"
         player_menu
@@ -112,6 +114,7 @@ end
         sleep(0.4)
         puts ""
         puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
+
         puts "Has won #{myrobot.wins} battle(s)."
         sleep(1)
 
@@ -144,14 +147,16 @@ end
 def fight
     myrobot = $robot
     battle = myrobot.choose_fight
+    
     robot_names = battle.robots.map(&:name)
     b = battle.fight
-    
+   
     puts "\n The winner is #{b[0].name}!!!!!!"
     puts "\n #{robot_names - [b[0].name]} has been destroyed."
-    battle.winner = b[0].name
-    battle.save
-    binding.pry
+
+    battle.update(winner: [b[0].id])
+
+    b[0].update_hitpoints
     $user = Player.find_by(username: $user.username)
 end
 ########################################
@@ -159,18 +164,18 @@ def fight_2vs2
     battle = $robot.choose_2vs2_fight($robot2)
     player_team = battle.robots.select{|robot| robot.player_id == $user.id}
     opposition_team = battle.robots.select{|robot| robot.player_id != $user.id}
-    teams = [player_team] + [opposition_team]
     win = battle.fight_2_vs_2(player_team, opposition_team)
     losers = battle.robots - win
-
-    if win != [] 
-        puts "\n The winner(s) is/are #{win.map(&:name).join(", ")}!!!!!!"
+    if win.length == 2
+         puts "\n The winners are #{win.map(&:name).join(", ")}!!!!!!"
+    elsif win.length == 0
+        puts "Every robot has died for your cause"
+    elsif win.length == 1
+        puts "\n The winner is #{win.map(&:name).join(", ")}!!!!!!"
     end
-
-    puts "\n #{losers.map(&:name).join(", ")} have been destroyed."
-
-    battle.winner = win.map(&:name).join(", ")
-    battle.save
+    puts "\n ... #{losers.map(&:name).join(", ")} have been destroyed."
+    battle.update(winner: win.map(&:id))
+    win.each{|winner| winner.update_hitpoints}
     $user = Player.find_by(username: $user.username)
 end
 ########################################
@@ -191,12 +196,13 @@ end
 def destroyed_robots
     puts ""
     prompt = TTY::Prompt.new
-    choice = prompt.select("Select a Robot:", $user.dead_robo_names, "Back to Player Menu", "Sell all leftover parts (deletes robots)", "Quit Game")
+    choice = prompt.select("Select a Robot:", $user.reload.dead_robo_names, "Back to Player Menu", "Sell all leftover parts (deletes robots)", "Quit Game")
 
     if choice == "Back to Player Menu"
         player_menu
     elsif choice == "Sell all leftover parts (deletes robots)"
         $user.dead_robots.each(&:delete)
+        puts "\n Your robot(s) has(ve) been absolutely annihilated, there were no salvageable parts. Better luck next time!"
         player_menu
     elsif choice == "Quit Game"
         quit_game_message
@@ -233,6 +239,7 @@ end
 def quit_game_message
     puts "Thanks for playing. Come back soon."
     puts ""
+    exit
 end
 ########################################
 ########################################

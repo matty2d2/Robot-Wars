@@ -22,7 +22,7 @@ class  Robot < ActiveRecord::Base
         robot_options = Robot.live_robots.reject{|r| r == self}.sample(5)
         options = robot_options.map(&:name)
 
-        choices = prompt.multi_select("Choose a robot to fight:", options, max: 3, default: 1 )
+        choices = prompt.multi_select("Choose robot(s) to fight:", options, max: 3, default: 1 )
         selected_robots =  robot_options.select{|obj| choices.include?(obj.name)}
         
         Batrob.create(robot_id: self.id, battle_id: battle.id)
@@ -72,10 +72,22 @@ class  Robot < ActiveRecord::Base
         self
     end
 
-    def wins
-        battles.select{|battle| battle.winner == self.name}.length
+    def wins # counts wins of robot (via id) so name change does not affect it
+        battles.reload.uniq.select {|battle| 
+        if battle == nil
+            false
+        elsif battle.winner == nil
+            false
+        else
+            battle.winner.gsub(/[\[\]]/,"").split(", ").map(&:to_i).include?(self.id)
+            # removing the array from the string in order to interact with winner ids
+        end
+    }.length #gives number of wins
     end
 
+    def update_hitpoints
+        self.update(hitpoints: 100 + (45 * self.wins))
+    end
 
 end
     
