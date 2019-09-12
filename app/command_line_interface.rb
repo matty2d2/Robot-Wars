@@ -147,15 +147,9 @@ end
 def fight
     myrobot = $robot
     battle = myrobot.choose_fight
-    b = battle.robots
-    rob_names = b.map(&:name)
-
-    until b.length == 1
-        victim = battle.fight
-        a = victim.check_hp
-        b -= [a]
-    end
-
+    robot_names = battle.robots.map(&:name)
+    b = battle.fight
+    
     puts "\n The winner is #{b[0].name}!!!!!!"
     puts "\n #{rob_names - [b[0].name]} has been destroyed."
     battle.update(winner: [b[0].id])
