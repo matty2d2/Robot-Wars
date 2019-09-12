@@ -4,19 +4,22 @@ class  Battle < ActiveRecord::Base
 
     def fight
         fighting_robots = self.robots
-        until fighting_robots.length > 1
+        while fighting_robots.length > 1
             fighting_robots.each do |robot|
-                r = robot.check_hp
+                if fighting_robots.length > 1
+                    robot.lose_hitpoints
+                    r = robot.check_hp
 
-                if r.hitpoints <= 0
-                    # binding.pry
+                    if r.hitpoints <= 0
 
-                    fighting_robots -= [r]
+                        fighting_robots -= [r]
+                    end
+                else
+                    return fighting_robots
                 end
-                robot.lose_hitpoints
             end
         end
-        fighting_robots
+        return fighting_robots
     end
 
     def fight_2_vs_2 (player_robots, opposition_robots)
