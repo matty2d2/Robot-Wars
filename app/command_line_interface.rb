@@ -246,7 +246,7 @@ def create_a_robot
     rob_name = prompt.ask("Enter a robot name:", required: true)
 
     if valid_robot_name?(rob_name)
-        myrobot = Robot.create(name: rob_name, player_id: $user.id)
+        myrobot = Robot.create(name: rob_name, player_id: $user.id, attack: rand(5..9))
         puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
     else
         puts "Robot has not been created. There is already a robot with that name."

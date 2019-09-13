@@ -4,6 +4,7 @@ class CreateRobots < ActiveRecord::Migration[6.0]
       t.string :name
       t.integer :player_id
       t.integer :hitpoints, :default => 100
+      t.integer :attack, :default => 7
     end
   end
 end
