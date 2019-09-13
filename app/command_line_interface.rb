@@ -112,10 +112,10 @@ end
         myrobot = $user.robots.find_by(name: choice)
         $robot = myrobot
         sleep(0.4)
-        puts ""
         puts myrobot.attributes.reject{|k,v| k == "id" || k == "player_id" || k == "name"}
 
         puts "Has won #{myrobot.wins} battle(s)."
+        puts ""
         sleep(1)
 
         choice = prompt.select("", "Fight with this Robot!", "Configure Robot", "Return to my Robots")
@@ -123,6 +123,10 @@ end
             configure_robot
             my_robots
         elsif choice == "Fight with this Robot!"
+            if Robot.live_robots.reject{|r| r.player_id == $robot.player_id}.sample(6).length != 6
+                puts "Unfortunately there are not enough robots for your entertainment. ☹️"
+                player_menu
+            end
             choose_gamemode
         elsif choice == "Return to my Robots"
             my_robots
@@ -133,7 +137,7 @@ end
 def choose_gamemode
     prompt = TTY::Prompt.new
     choice = prompt.select("Choose a game-mode:", "Battle-Royale", "2 v 2")
-    
+
     if choice == "Battle-Royale"
         fight
         player_menu
@@ -145,14 +149,22 @@ def choose_gamemode
 end
 ########################################
 def fight
+
     myrobot = $robot
     battle = myrobot.choose_fight
     
     robot_names = battle.robots.map(&:name)
     b = battle.fight
-   
-    puts "\n The winner is #{b[0].name}!"
-    puts "\n #{robot_names - [b[0].name]} has been destroyed."
+
+    destroyed = robot_names - [b[0].name]
+
+    destroyed.each do |robot|
+        random_sentence
+        sleep(1.3)
+        puts "\n#{robot} has been destroyed. ☠️"
+    end
+    sleep(1.3)
+    puts "\n🏆 ~~~~The winner is #{b[0].name}!~~~~🏆"
 
     battle.update(winner: [b[0].id])
 
@@ -161,19 +173,29 @@ def fight
 end
 ########################################
 def fight_2vs2
+
     battle = $robot.choose_2vs2_fight($robot2)
     player_team = battle.robots.select{|robot| robot.player_id == $user.id}
     opposition_team = battle.robots.select{|robot| robot.player_id != $user.id}
     win = battle.fight_2_vs_2(player_team, opposition_team)
     losers = battle.robots - win
-    if win.length == 2
-         puts "\n The winners are #{win.map(&:name).join(", ")}!"
-    elsif win.length == 0
-        puts "Every robot has died for your cause"
-    elsif win.length == 1
-        puts "\n The winner is #{win.map(&:name).join(", ")}!"
+
+    losers.map(&:name).each do |robot|
+        random_sentence
+        sleep(1.5)
+        puts "\n#{robot} has been destroyed. ☠️"
     end
-    puts "\n ... #{losers.map(&:name).join(", ")} have been destroyed."
+
+    if win.length == 2
+        sleep(1.3)
+         puts "\n🏆 ~~~~The winners are #{win.map(&:name).join(" & ")}!~~~~🏆"
+    elsif win.length == 0
+        puts "\n💥  Every robot has died for your enjoyment."
+    elsif win.length == 1
+        sleep(1.3)
+        puts "\n🏆 ~~~~The winner is #{win.map(&:name).join(", ")}!~~~~🏆"
+    end
+    sleep(0.5)
     battle.update(winner: win.map(&:id))
     win.each{|winner| winner.update_hitpoints}
     $user = Player.find_by(username: $user.username)
@@ -237,7 +259,7 @@ end
 ########################################
 ########################################
 def quit_game_message
-    puts "Thanks for playing. Come back soon."
+    puts "Thanks for playing. Come back soon." ###⚡️☄️🔥✨🌪❄️🥊💣⚔️
     puts ""
     exit
 end
@@ -247,13 +269,13 @@ def stats
     prompt = TTY::Prompt.new
 
     sleep(0.2)
-    puts "Total Wins: #{$user.total_wins}"
+    puts "🏆 Total Wins: #{$user.total_wins}"
     sleep(0.5)
-    puts "Number of Robots: #{$user.live_robots.length}"
+    puts "🤖 Number of Robots: #{$user.live_robots.length}"
     sleep(0.5)
-    puts "Number of Destroyed Robots: #{$user.dead_robots.length}"
+    puts "💀 Number of Destroyed Robots: #{$user.dead_robots.length}"
     sleep(0.5)
-    puts "Robot with the most wins: #{$user.best_robot.name} ~ #{$user.best_robot.wins}"
+    puts "⭐️ Robot with the most wins: #{$user.best_robot.name} ~ #{$user.best_robot.wins}"
     sleep(0.5)
     prompt.ask("Press Enter to return back to the player menu.")
     player_menu
@@ -283,4 +305,11 @@ def change_name
     else
         puts "Robot name has not been changed. There is already a robot with that name."
     end
+end
+
+def random_sentence
+    b = ["Tearing robot arms off!", "Making your mother cry. 😭", "Betting all on that robot on the left. 💸", "Breaking up fan fights in the crowd. 🥊", "oooh! That was absolutely barbaric! ⚔️", "Pulverizing opponents! 💥", "Spraying acid 💉", "Igniting opponents! 🔥", "Throwing fireballs! ☄️", "Throwing shade to other owners.", "Annoying Mike!!!!!!!", "Elating the crowd. 💊", "HULK. SMASH!", "I just peed my pants. 💦"]
+    sleep(1.5)
+    puts "\n      #{b.sample}"
+    
 end
