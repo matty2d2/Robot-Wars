@@ -76,14 +76,14 @@ def player_menu
     puts ""
     prompt = TTY::Prompt.new
 
-    choice = prompt.select("", "Create a new Robot!", "My Robots", "My Destroyed Robots", "Stats", "Back to Log-in Menu", "Quit Game")
+    choice = prompt.select("", "Create New Robot", "Fight with my Robots!", "Destroyed Robots", "Stats", "Back to Log-in Menu", "Quit Game")
 
-    if choice == "Create a new Robot!"
+    if choice == "Create New Robot"
         create_a_robot
         player_menu
-    elsif choice == "My Robots"
+    elsif choice == "Fight with my Robots!"
         my_robots
-    elsif choice == "My Destroyed Robots"
+    elsif choice == "Destroyed Robots"
         destroyed_robots
     elsif choice == "Stats"
         stats
@@ -308,7 +308,7 @@ def change_name
 end
 
 def random_sentence
-    b = ["Tearing robot arms off!", "Making your mother cry. 😭", "Betting all on that robot on the left. 💸", "Breaking up fan fights in the crowd. 🥊", "oooh! That was absolutely barbaric! ⚔️", "Pulverizing opponents! 💥", "Spraying acid 💉", "Igniting opponents! 🔥", "Throwing fireballs! ☄️", "Throwing shade to other owners.", "Annoying Mike!!!!!!!", "Elating the crowd. 💊", "HULK. SMASH!", "I just peed my pants. 💦"]
+    b = ["Tearing robot arms off!", "Making your mother cry. 😭", "Betting all on that robot on the left. 💸", "Breaking up fan fights in the crowd. 🥊", "oooh! That was absolutely barbaric! ⚔️", "Pulverizing opponents! 💥", "Spraying acid 💉", "Igniting opponents! 🔥", "Throwing fireballs! ☄️", "Throwing shade to other owners.", "Annoying Mike!!!!!!!", "Elating the crowd. 💊", "HULK. SMASH!", "Easy Pickings", "Robots Rusting", "Throwing Haymakers", "You're Fired! 🔥"]
     sleep(1.5)
     puts "\n      #{b.sample}"
     
