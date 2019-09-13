@@ -308,7 +308,7 @@ def change_name
 end
 
 def random_sentence
-    b = ["Tearing robot arms off!", "Making your mother cry. 😭", "Betting all on that robot on the left. 💸", "Breaking up fan fights in the crowd. 🥊", "oooh! That was absolutely barbaric! ⚔️", "Pulverizing opponents! 💥", "Spraying acid 💉", "Igniting opponents! 🔥", "Throwing fireballs! ☄️", "Throwing shade to other owners.", "Annoying Mike!!!!!!!", "Elating the crowd. 💊", "HULK. SMASH!"]
+    b = ["Tearing robot arms off!", "Making your mother cry. 😭", "Betting all on that robot on the left. 💸", "Breaking up fan fights in the crowd. 🥊", "oooh! That was absolutely barbaric! ⚔️", "Pulverizing opponents! 💥", "Spraying acid 💉", "Igniting opponents! 🔥", "Throwing fireballs! ☄️", "Throwing shade to other owners.", "Annoying Mike!!!!!!!", "Elating the crowd. 💊", "HULK. SMASH!", "Easy Pickings", "Robots Rusting", "Throwing Haymakers", "You're Fired! 🔥"]
     sleep(1.5)
     puts "\n      #{b.sample}"
     
