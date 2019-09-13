@@ -4,7 +4,7 @@ class  Battle < ActiveRecord::Base
 
     def fight
         fighting_robots = self.robots
-        until fighting_robots.length > 1
+        while fighting_robots.length > 1
             fighting_robots.each do |robot|
                 r = robot.check_hp
 
