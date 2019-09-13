@@ -46,7 +46,6 @@ class  Robot < ActiveRecord::Base
         team_2 = "Team 2 : #{team_options[1][0].name} & #{team_options[1][1].name}"
         team_3 = "Team 3 : #{team_options[2][0].name} & #{team_options[2][1].name}"
         choice = prompt.select("Choose a team to fight:", team_1, team_2, team_3, max: 1)
-
         if choice == team_1
             Batrob.create(robot_id: team_options[0][0].id, battle_id: battle.id)
             Batrob.create(robot_id: team_options[0][1].id, battle_id: battle.id)
@@ -86,7 +85,7 @@ class  Robot < ActiveRecord::Base
     end
 
     def update_hitpoints
-        self.update(hitpoints: 100 + (45 * self.wins))
+        self.update(hitpoints: 100 + (33 * self.wins))
     end
 
 end
