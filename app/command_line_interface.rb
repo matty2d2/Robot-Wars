@@ -133,7 +133,7 @@ end
         end
     end
 end
-########################################
+######################################################
 def choose_gamemode
     prompt = TTY::Prompt.new
     choice = prompt.select("Choose a game-mode:", "Battle-Royale", "2 v 2")
